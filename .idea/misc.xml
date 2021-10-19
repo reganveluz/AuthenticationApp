@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/drawable/logo.xml" value="0.4036458333333333" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/drawable/shape.xml" value="0.4036458333333333" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/drawable/shape2.xml" value="0.4036458333333333" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/drawable/usericon.xml" value="0.4036458333333333" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_add_listing_maps.xml" value="0.2653985507246377" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_current_listing.xml" value="0.33" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_driver.xml" value="0.3875" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_login.xml" value="0.3754528985507246" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_main.xml" value="0.29010416666666666" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_modify_listing.xml" value="0.33" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_modify_listing2.xml" value="0.24909420289855072" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_new_listing.xml" value="0.3875" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_new_listing2.xml" value="0.3875" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_owner.xml" value="0.3875" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_parking_slot_status.xml" value="0.24909420289855072" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_register.xml" value="0.3754528985507246" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_splash_screen.xml" value="0.33" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_account.xml" value="0.29030797101449274" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_account2.xml" value="0.31657608695652173" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_edit_lotdescription.xml" value="0.5" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_editprofile.xml" value="0.2341485507246377" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_home.xml" value="0.2966485507246377" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_home2.xml" value="0.31657608695652173" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_parking.xml" value="0.33" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_parking2.xml" value="0.31657608695652173" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_signout.xml" value="0.2341485507246377" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/menu/bottom_navigation.xml" value="0.3875" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

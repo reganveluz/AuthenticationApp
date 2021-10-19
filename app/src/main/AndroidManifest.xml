@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.authenticationapp">
+
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        tools:remove="android:maxSdkVersion" />
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        tools:remove="android:maxSdkVersion" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Parking Boy"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AuthenticationApp">
+
+        <activity
+            android:name=".UserLogin.SplashScreen"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".UserLogin.Register"
+            android:exported="true" />
+        <activity
+            android:name=".OwnerInterface.AddListingMaps"
+            android:exported="true" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map_key" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".OwnerInterface.ModifyListing2"
+            android:exported="true" />
+        <activity
+            android:name=".OwnerInterface.ModifyListing"
+            android:exported="true" />
+        <activity
+            android:name=".OwnerInterface.ParkingSlotStatus"
+            android:exported="true" />
+        <activity
+            android:name=".OwnerInterface.CurrentListing"
+            android:exported="true" />
+        <activity
+            android:name=".OwnerInterface.NewListing2"
+            android:exported="true" />
+        <activity
+            android:name=".OwnerInterface.NewListing"
+            android:exported="true" />
+        <activity
+            android:name=".OwnerInterface.Owner"
+            android:exported="true" />
+        <activity
+            android:name=".DriverInterface.Driver"
+            android:exported="true" />
+        <activity
+            android:name=".UserLogin.Login"
+            android:exported="true" />
+
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+    </application>
+
+</manifest>
