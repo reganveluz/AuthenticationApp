@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -33,13 +36,17 @@ import androidx.fragment.app.Fragment;
 import com.example.authenticationapp.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,10 +63,12 @@ import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
-public class HomeFragment2 extends Fragment implements OnMapReadyCallback {
+public class HomeFragment2 extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener {
 
     private static final String TAG = "";
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9001;
@@ -77,11 +86,14 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient mFusedLocationClient;
     private UserLocation mUserLocation;
     private EditText mSearchDestination;
-    LatLng currentLatLng;
+    private LatLng currentLatLng;
+    public String garageID;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
         //initialize view
         View home = inflater.inflate(R.layout.fragment_home2, container, false);
         //initialize map
@@ -93,6 +105,7 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         TextView textView = (TextView) home.findViewById(R.id.userID);
+
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -116,9 +129,14 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback {
 
         return home;
     }
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 
     private void init() {
         Log.d(TAG, "init: initializing");
+
         mSearchDestination.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -154,15 +172,11 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
     private void moveCamera(LatLng latLng, float zoom, String title) {
         mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
-        MarkerOptions options = new MarkerOptions()
-                .position(latLng)
-                .title(title);
-
-        mgoogleMap.addMarker(options);
-
+        getGarageLocations();
+        mgoogleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getActivity()));
 
     }
 
@@ -226,7 +240,7 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint({"MissingPermission", "PotentialBehaviorOverride"})
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mgoogleMap = googleMap;
@@ -236,6 +250,9 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback {
         init();
         //get garage locations
         getGarageLocations();
+        //custom info window
+        mgoogleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getActivity()));
+        mgoogleMap.setOnInfoWindowClickListener(this);
 
 
     }
@@ -414,11 +431,13 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    private void getGarageLocations() {
+    public void getGarageLocations() {
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         userID = fAuth.getCurrentUser().getUid();
+
+
 
         CollectionReference collectionReference = fStore.collection("Garage Locations");
 
@@ -429,11 +448,22 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback {
                     for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
                         GeoPoint geoPoint = documentSnapshot.getGeoPoint("Geopoint");
                         String garageName = documentSnapshot.getString("Garage name");
+                        String address = documentSnapshot.getString("Address");
+                        String slot = documentSnapshot.getString("Slots available");
+                        List<String> cartype = (List<String>) documentSnapshot.get("Supported cars");
+                        String start = documentSnapshot.getString("Starting Time");
+                        String end = documentSnapshot.getString("End Time");
+                        String phone = documentSnapshot.getString("Phone");
                         double lat = geoPoint.getLatitude();
                         double lng = geoPoint.getLongitude();
                         LatLng latLng = new LatLng(lat,lng);
-                        MarkerOptions options = new MarkerOptions().position(latLng).title(garageName);
-                        mgoogleMap.addMarker(options);
+                        MarkerOptions markerOptions = new MarkerOptions()
+                                .position(latLng)
+                                .title(garageName)
+                                .snippet(" Address: " + address + "\n Slots available: " + slot + "\n Cars supported: " + cartype
+                                + "\n Start: " + start + "\n Close: " + end + "\n Contact Info: " +phone)
+                                .icon(bitmapDescriptorFromVector(getActivity(),R.drawable.marker_icon));
+                        mgoogleMap.addMarker(markerOptions);
                     }
                 }
             }
@@ -442,6 +472,34 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback {
 
 
     }
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
 
+
+    @Override
+    public void onInfoWindowClick(@NonNull Marker marker) {
+
+        garageID = marker.getTitle();
+
+        fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+
+        DocumentReference documentReference = fStore.collection("Garage Loader").document("Garage Name");
+        String garageIDs = garageID;
+
+        Map<String, Object> garage = new HashMap<>();
+        garage.put("Garage ID", garageIDs);
+
+        documentReference.set(garage);
+
+        Intent intent = new Intent(getActivity(), PaymentWindow.class);
+        startActivity(intent);
+    }
 }
 

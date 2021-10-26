@@ -129,7 +129,8 @@ public class AddListingMaps extends AppCompatActivity {
 
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
-                .title(title);
+                .title(title)
+                .draggable(true);
 
         mgoogleMap.addMarker(options);
 
@@ -234,10 +235,23 @@ public class AddListingMaps extends AppCompatActivity {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if(documentSnapshot.exists()){
                             String lotname = documentSnapshot.getString("Lot name");
+                            String slot = documentSnapshot.getString("Exact number of slots");
+                            List<String> cartype = (List<String>) documentSnapshot.get("Supported cars");
+                            //String lotdescription = documentSnapshot.getString("lot description");
+                            String address = documentSnapshot.getString("Address");
+                            String start = documentSnapshot.getString("Starting Time");
+                            String end = documentSnapshot.getString("End Time");
+                            String contactinfo = documentSnapshot.getString("Phone");
 
                             DocumentReference locationRef = fStore.collection("Garage Locations").document(userID);
                             Map<String, Object> garageInfo = new HashMap<>();
-                            garageInfo.put("Garage name",lotname);
+                            garageInfo.put("Garage name", lotname);
+                            garageInfo.put("Slots available",slot);
+                            garageInfo.put("Supported cars",cartype);
+                            garageInfo.put("Address",address);
+                            garageInfo.put("Starting Time",start);
+                            garageInfo.put("End Time",end);
+                            garageInfo.put("Phone",contactinfo);
 
                             locationRef.set(garageInfo , SetOptions.merge());
 

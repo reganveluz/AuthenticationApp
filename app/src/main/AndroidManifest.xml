@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.authenticationapp">
+    package="com.example.authenticationapp" >
 
     <uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
@@ -15,21 +15,25 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Parking Boy"
+        android:label=""
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AuthenticationApp">
-
+        android:theme="@style/Theme.AuthenticationApp" >
+        <activity
+            android:name=".DriverInterface.CarInformation"
+            android:exported="false" />
+        <activity
+            android:name=".DriverInterface.PaymentWindow"
+            android:exported="false" />
         <activity
             android:name=".UserLogin.SplashScreen"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".UserLogin.Register"
             android:exported="true" />
@@ -71,7 +75,6 @@
         <activity
             android:name=".UserLogin.Login"
             android:exported="true" />
-
 
         <meta-data
             android:name="com.google.android.gms.version"
