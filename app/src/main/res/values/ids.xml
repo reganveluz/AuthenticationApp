@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tv" type="id" />
+    <item name="ratingBar" type="id" />
+    <item name="textView35" type="id" />
+    <item name="edit_feedback" type="id" />
+    <item name="btn_submit" type="id" />
+    <item name="textView31" type="id" />
+    <item name="email_edit" type="id" />
+    <item name="lotname_edit" type="id" />
+    <item name="textView34" type="id" />
+    <item name="textView33" type="id" />
+    <item name="address_edit" type="id" />
+    <item name="phone_edit" type="id" />
+    <item name="editTV" type="id" />
+</resources>
