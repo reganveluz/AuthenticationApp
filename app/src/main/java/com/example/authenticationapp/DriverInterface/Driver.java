@@ -10,9 +10,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.authenticationapp.R;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Driver extends AppCompatActivity {
+
+    private Polyline currentPolyline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

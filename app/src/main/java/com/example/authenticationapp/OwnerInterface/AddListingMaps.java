@@ -68,7 +68,8 @@ public class AddListingMaps extends AppCompatActivity {
     private UserLocation mUserLocation;
     private EditText mSearchDestination;
     private LatLng currentLatLng;
-
+    private String lotname;
+    private Integer number;
 
 
     @Override
@@ -213,28 +214,13 @@ public class AddListingMaps extends AppCompatActivity {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
 
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
-                markerOptions.title(latLng.latitude+" : " + latLng.longitude);
-                mgoogleMap.clear();
-                mgoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));
-                mgoogleMap.addMarker(markerOptions);
-
-                GeoPoint geoPoint = new GeoPoint(latLng.latitude,latLng.longitude);
-
-                DocumentReference locationRef = fStore.collection("Garage Locations").document(userID);
-                Map<String, Object> geopoint = new HashMap<>();
-                geopoint.put("Geopoint", geoPoint);
-
-                locationRef.set(geopoint);
-
                 DocumentReference userRef = fStore.collection("users").document(userID);
 
                 userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if(documentSnapshot.exists()){
-                            String lotname = documentSnapshot.getString("Lot name");
+                            lotname = documentSnapshot.getString("Lot name");
                             String slot = documentSnapshot.getString("Exact number of slots");
                             List<String> cartype = (List<String>) documentSnapshot.get("Supported cars");
                             //String lotdescription = documentSnapshot.getString("lot description");
@@ -243,7 +229,7 @@ public class AddListingMaps extends AppCompatActivity {
                             String end = documentSnapshot.getString("End Time");
                             String contactinfo = documentSnapshot.getString("Phone");
 
-                            DocumentReference locationRef = fStore.collection("Garage Locations").document(userID);
+                            DocumentReference locationRef = fStore.collection("Garage Locations").document(lotname);
                             Map<String, Object> garageInfo = new HashMap<>();
                             garageInfo.put("Garage name", lotname);
                             garageInfo.put("Slots available",slot);
@@ -254,6 +240,45 @@ public class AddListingMaps extends AppCompatActivity {
                             garageInfo.put("Phone",contactinfo);
 
                             locationRef.set(garageInfo , SetOptions.merge());
+
+                            DocumentReference docRef2 = fStore.collection("users").document(userID);
+                            docRef2.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    String slot = documentSnapshot.getString("Exact number of slots");
+                                    String value = null;
+                                    try {
+                                        number = Integer.parseInt(slot);
+
+                                    } catch (NumberFormatException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                    for (int i = 1; i <= number; i++) {
+                                        DocumentReference docRef = fStore.collection("Garage Locations").document(lotname);
+                                        Map<String, Object> slotstatus = new HashMap<>();
+                                        slotstatus.put("Slot " + i, value);
+
+                                        docRef.set(slotstatus, SetOptions.merge());
+                                    }
+                                }
+                            });
+
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title(latLng.latitude+" : " + latLng.longitude);
+                mgoogleMap.clear();
+                mgoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));
+                mgoogleMap.addMarker(markerOptions);
+
+                GeoPoint geoPoint = new GeoPoint(latLng.latitude,latLng.longitude);
+
+                DocumentReference locationRef2 = fStore.collection("Garage Locations").document(lotname);
+                Map<String, Object> geopoint = new HashMap<>();
+                geopoint.put("Geopoint", geoPoint);
+
+                locationRef2.set(geopoint, SetOptions.merge());
+
+
 
                         }
                     }

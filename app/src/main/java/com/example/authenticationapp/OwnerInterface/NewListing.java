@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.authenticationapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -119,6 +121,7 @@ public class NewListing extends AppCompatActivity {
         });
 
 
+
         mnextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,6 +131,31 @@ public class NewListing extends AppCompatActivity {
                 ArrayList<String> garageType = mgarageType;
                 ArrayList<String> supportedCars = msupportedCars;
                 String address = maddress.getText().toString();
+
+                if (TextUtils.isEmpty(inputLotname)){
+                    minputlotName.setError("Please enter Lot Name");
+                    return;
+                }
+                if (TextUtils.isEmpty(sqm)){
+                    msqm.setError("This field is required");
+                    return;
+                }
+                if (TextUtils.isEmpty(exactNumber)){
+                    mexactNumber.setError("This field is required");
+                    return;
+                }
+                if (TextUtils.isEmpty(address)){
+                    maddress.setError("Please enter Address");
+                    return;
+                }
+                if (!mSingle.isChecked() && !mMulti.isChecked() && !mUnder.isChecked() && !mStreet.isChecked()) {
+                    Toast.makeText(NewListing.this, "Please select a garage type", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!mCompact.isChecked() && !mmidSize.isChecked() && !mfullSize.isChecked()) {
+                    Toast.makeText(NewListing.this, "Please select supported cars", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 userID = fAuth.getCurrentUser().getUid();
                 DocumentReference userRef = fStore.collection("users").document(userID);

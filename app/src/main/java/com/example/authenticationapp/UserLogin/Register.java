@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,8 +29,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class Register extends AppCompatActivity {
+
+    private static final Pattern PASSWORD_PATTERN =
+            Pattern.compile("^" +
+                    "(?=.*[0-9])" +
+                    "(?=.*[A-Z])" +
+                    "(?=.*[@#$%^&+=])" +
+                    "(?=\\S+$)" +
+                    ".{6,}" +
+                    "$");
     public static final String TAG = "TAG";
     EditText mFullname, mEmail, mPassword, mPhone;
     Button mRegisterBtn;
@@ -77,6 +88,11 @@ public class Register extends AppCompatActivity {
                     return;
                 }
 
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    mEmail.setError("Please enter a valid email address");
+                    return;
+                }
+
                 if(TextUtils.isEmpty(password)){
                     mPassword.setError("Password is required");
                     return;
@@ -84,6 +100,11 @@ public class Register extends AppCompatActivity {
 
                 if (password.length() < 6) {
                     mPassword.setError("Password must be at least 6 characters");
+                }
+
+                if (!PASSWORD_PATTERN.matcher(password).matches()){
+                    mPassword.setError("Password too weak");
+                    return;
                 }
 
                 progressBar.setVisibility(View.VISIBLE);

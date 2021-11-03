@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".DriverInterface.PaymentWindow">
 
+  <CheckBox
+      android:id="@+id/checkBox9H"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="9H"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.883"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
   <TextView
       android:id="@+id/totalPrice"
       android:layout_width="wrap_content"
@@ -71,6 +82,22 @@
       app:layout_constraintVertical_bias="0.197" />
 
   <TextView
+      android:id="@+id/carModel2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Car Model"
+      android:textColor="@color/browser_actions_title_color"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      android:visibility="invisible"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.867"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.197" />
+
+  <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="License Plate"
@@ -88,17 +115,47 @@
       android:id="@+id/licensePlate"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="License Plate"
       android:textColor="@color/browser_actions_title_color"
       android:textSize="20sp"
       android:textStyle="bold"
       android:visibility="invisible"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.854"
+      app:layout_constraintHorizontal_bias="0.87"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.286" />
+
+  <TextView
+      android:id="@+id/tvgcash"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Gcash"
+      android:textColor="@color/browser_actions_title_color"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      android:visibility="visible"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.87"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.633" />
+
+  <TextView
+      android:id="@+id/price"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/browser_actions_title_color"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      android:visibility="invisible"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.876"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.714" />
 
   <TextView
       android:id="@+id/arrival"
@@ -116,10 +173,10 @@
       app:layout_constraintVertical_bias="0.416" />
 
   <TextView
-      android:id="@+id/leaving"
+      android:id="@+id/rentHours"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Leaving"
+      android:text="Hours"
       android:textColor="@color/black"
       android:textSize="20sp"
       android:textStyle="bold"
@@ -145,7 +202,7 @@
       app:layout_constraintVertical_bias="0.633" />
 
   <Button
-      android:id="@+id/button"
+      android:id="@+id/payBtn"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
@@ -157,4 +214,41 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.94" />
+
+  <EditText
+      android:id="@+id/arrivalTime"
+      android:layout_width="79dp"
+      android:layout_height="48dp"
+      android:ems="10"
+      android:hint="HH : MM"
+      android:inputType="time"
+      android:textColor="@color/black"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.861"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.422" />
+
+  <CheckBox
+      android:id="@+id/checkBox3H"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="3H"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.606"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <CheckBox
+      android:id="@+id/checkBox6H"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="6H"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.745"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

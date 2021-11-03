@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.authenticationapp" >
+    package="com.example.authenticationapp">
 
     <uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
@@ -18,7 +18,13 @@
         android:label=""
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AuthenticationApp" >
+        android:theme="@style/Theme.AuthenticationApp">
+        <activity
+            android:name=".DriverInterface.QRReceipt"
+            android:exported="false" />
+        <activity
+            android:name=".DriverInterface.BillingInformation"
+            android:exported="false" />
         <activity
             android:name=".DriverInterface.CarInformation"
             android:exported="false" />
@@ -27,7 +33,7 @@
             android:exported="false" />
         <activity
             android:name=".UserLogin.SplashScreen"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -79,6 +85,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
     </application>
 
 </manifest>

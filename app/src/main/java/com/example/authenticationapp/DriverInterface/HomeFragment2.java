@@ -15,6 +15,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +51,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -59,16 +64,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.PendingResult;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.internal.PolylineEncoding;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
-public class HomeFragment2 extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener {
+public class HomeFragment2 extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnPolylineClickListener {
 
     private static final String TAG = "";
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9001;
@@ -88,6 +97,10 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback, Googl
     private EditText mSearchDestination;
     private LatLng currentLatLng;
     public String garageID;
+    private GeoApiContext mGeoApiContext = null;
+    private Marker saveMarker;
+    private ArrayList<PolylineData> mPolylinesData = new ArrayList<>();
+
 
     @Nullable
     @Override
@@ -101,15 +114,30 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback, Googl
 
         mSearchDestination = (EditText) home.findViewById(R.id.searchDestination);
 
+
         mapView.onCreate(savedInstanceState);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         TextView textView = (TextView) home.findViewById(R.id.userID);
 
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mgoogleMap.clear();
+                getGarageLocations();
+                calculateDirections(saveMarker);
+
+            }
+        };
+
+        Button getdirectionsBtn = (Button) home.findViewById(R.id.getDirectionsBtn);
+        getdirectionsBtn.setOnClickListener(listener);
+
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         userID = fAuth.getCurrentUser().getUid();
+
 
 
         DocumentReference documentReference = fStore.collection("users").document(userID);
@@ -132,6 +160,89 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback, Googl
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    private void addPolylinesToMap(final DirectionsResult result){
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "run: result routes: " + result.routes.length);
+                if(mPolylinesData.size() > 0){
+                    for(PolylineData polylineData: mPolylinesData){
+                        polylineData.getPolyline().remove();
+                    }
+                    mPolylinesData.clear();
+                    mPolylinesData = new ArrayList<>();
+                }
+
+                double duration = 999999999;
+                for(DirectionsRoute route: result.routes){
+                    Log.d(TAG, "run: leg: " + route.legs[0].toString());
+                    List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
+
+                    List<LatLng> newDecodedPath = new ArrayList<>();
+
+                    // This loops through all the LatLng coordinates of ONE polyline.
+                    for(com.google.maps.model.LatLng latLng: decodedPath){
+
+//                        Log.d(TAG, "run: latlng: " + latLng.toString());
+
+                        newDecodedPath.add(new LatLng(
+                                latLng.lat,
+                                latLng.lng
+                        ));
+                    }
+                   Polyline polyline = mgoogleMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
+                    polyline.setColor(ContextCompat.getColor(getActivity(), R.color.purple_500));
+                    polyline.setClickable(true);
+
+                    double tempDuration = route.legs[0].duration.inSeconds;
+                    if(tempDuration < duration){
+                        duration = tempDuration;
+                        onPolylineClick(polyline);
+                    }
+
+                    mPolylinesData.add(new PolylineData(polyline, route.legs[0]));
+                }
+            }
+        });
+    }
+
+    private void calculateDirections(Marker marker){
+        Log.d(TAG, "calculateDirections: calculating directions.");
+
+        com.google.maps.model.LatLng destination = new com.google.maps.model.LatLng(
+                 marker.getPosition().latitude,
+                marker.getPosition().longitude
+        );
+        DirectionsApiRequest directions = new DirectionsApiRequest(mGeoApiContext);
+
+        directions.alternatives(true);
+        directions.origin(
+                new com.google.maps.model.LatLng(
+                        mUserLocation.getGeo_point().getLatitude(),
+                        mUserLocation.getGeo_point().getLongitude()
+                )
+        );
+        Log.d(TAG, "calculateDirections: destination: " + destination.toString());
+        directions.destination(destination).setCallback(new PendingResult.Callback<DirectionsResult>() {
+            @Override
+            public void onResult(DirectionsResult result) {
+                Log.d(TAG, "calculateDirections: routes: " + result.routes[0].toString());
+                Log.d(TAG, "calculateDirections: duration: " + result.routes[0].legs[0].duration);
+                Log.d(TAG, "calculateDirections: distance: " + result.routes[0].legs[0].distance);
+                Log.d(TAG, "calculateDirections: geocodedWayPoints: " + result.geocodedWaypoints[0].toString());
+
+                addPolylinesToMap(result);
+                addPolylinesToMap(result);
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+                Log.e(TAG, "calculateDirections: Failed to get directions: " + e.getMessage() );
+
+            }
+        });
     }
 
     private void init() {
@@ -243,8 +354,14 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback, Googl
     @SuppressLint({"MissingPermission", "PotentialBehaviorOverride"})
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
+
         mgoogleMap = googleMap;
         mgoogleMap.setMyLocationEnabled(true);
+        if(mGeoApiContext == null){
+            mGeoApiContext = new GeoApiContext.Builder()
+                    .apiKey(getString(R.string.map_key))
+                    .build();
+        }
         getLastKnownLocation();
         //initialize search bar
         init();
@@ -253,6 +370,17 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback, Googl
         //custom info window
         mgoogleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getActivity()));
         mgoogleMap.setOnInfoWindowClickListener(this);
+
+        mgoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+                saveMarker = marker;
+                return false;
+            }
+        });
+
+        mgoogleMap.setOnPolylineClickListener(this);
+
 
 
     }
@@ -275,7 +403,6 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback, Googl
                 getLocationPermission();
             }
         }
-
     }
 
     @Override
@@ -464,6 +591,7 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback, Googl
                                 + "\n Start: " + start + "\n Close: " + end + "\n Contact Info: " +phone)
                                 .icon(bitmapDescriptorFromVector(getActivity(),R.drawable.marker_icon));
                         mgoogleMap.addMarker(markerOptions);
+
                     }
                 }
             }
@@ -483,23 +611,49 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback, Googl
 
 
     @Override
-    public void onInfoWindowClick(@NonNull Marker marker) {
+    public void onInfoWindowClick(final Marker marker) {
 
         garageID = marker.getTitle();
 
-        fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
-
-        DocumentReference documentReference = fStore.collection("Garage Loader").document("Garage Name");
-        String garageIDs = garageID;
-
-        Map<String, Object> garage = new HashMap<>();
-        garage.put("Garage ID", garageIDs);
-
-        documentReference.set(garage);
+        //routing
+        // not yet needed because I set it on a button named get directions
+        //calculateDirections(marker);
 
         Intent intent = new Intent(getActivity(), PaymentWindow.class);
+        String garageName = garageID;
+        intent.putExtra("Garage ID", garageName);
         startActivity(intent);
+
+    }
+
+    @Override
+    public void onPolylineClick(Polyline polyline) {
+        int index=0;
+        for(PolylineData polylineData: mPolylinesData){
+            index++;
+            Log.d(TAG, "onPolylineClick: toString: " + polylineData.toString());
+            if(polyline.getId().equals(polylineData.getPolyline().getId())){
+                polylineData.getPolyline().setColor(ContextCompat.getColor(getActivity(), R.color.wallet_holo_blue_light));
+                polylineData.getPolyline().setZIndex(1);
+
+                LatLng endLocation = new LatLng(
+                        polylineData.getLeg().endLocation.lat,
+                        polylineData.getLeg().endLocation.lng
+                );
+                Marker marker = mgoogleMap.addMarker(new MarkerOptions()
+                        .position(endLocation)
+                        .title("Route " + index)
+                        .snippet("Duration: " + polylineData.getLeg().duration + "\n Distance: " + polylineData.getLeg().distance)
+                        .icon(bitmapDescriptorFromVector(getActivity(),R.drawable.ic_baseline_directions_car_24)));
+                marker.showInfoWindow();
+
+            }
+            else{
+                polylineData.getPolyline().setColor(ContextCompat.getColor(getActivity(), R.color.purple_500));
+                polylineData.getPolyline().setZIndex(0);
+            }
+
+        }
     }
 }
 

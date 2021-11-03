@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#BDAADF"
+    android:backgroundTint="#FFFFFF"
+    tools:context=".OwnerInterface.feedback">
+
+    <TextView
+        android:id="@+id/textView32"
+        android:layout_width="302dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="60dp"
+        android:text="Write Feedback"
+        android:textAlignment="center"
+        android:textColor="@color/purple_500"
+        android:textSize="40dp"
+        android:textStyle="bold"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_feedback"
+        android:layout_width="360dp"
+        android:layout_height="174dp"
+        android:layout_marginTop="52dp"
+        android:background="#CABCBC"
+        android:backgroundTint="#E0D7F1"
+        android:gravity="top"
+        android:hapticFeedbackEnabled="false"
+        android:hint="What do you think about this app"
+        android:inputType="text|textMultiLine"
+        android:textSize="20sp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView32"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="347dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="28dp"
+        android:text="Submit feedback"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+    <TextView
+        android:id="@+id/textView35"
+        android:layout_width="351dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="28dp"
+        android:text="How was your experience with us?"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.566"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_feedback" />
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#FFFFFF"
+        android:progressBackgroundTint="#BA9FEA"
+        android:progressTint="#6937C3"
+        android:secondaryProgressTint="#BA2B2B"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="184dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="20dp"
+        android:text="Give me a star"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView35" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

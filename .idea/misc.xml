@@ -8,8 +8,10 @@
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/drawable/shape2.xml" value="0.4036458333333333" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/drawable/usericon.xml" value="0.4036458333333333" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_add_listing_maps.xml" value="0.2653985507246377" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_billing_information.xml" value="0.26992753623188404" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_car_information.xml" value="0.296195652173913" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_current_listing.xml" value="0.33" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_dp_modify_slot.xml" value="0.2898550724637681" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_driver.xml" value="0.3875" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_login.xml" value="0.3754528985507246" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_main.xml" value="0.29010416666666666" />
@@ -20,13 +22,17 @@
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_owner.xml" value="0.3875" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_parking_slot_status.xml" value="0.24909420289855072" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_payment_window.xml" value="0.30842391304347827" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_qrreceipt.xml" value="0.2558876811594203" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_register.xml" value="0.3754528985507246" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/activity_splash_screen.xml" value="0.33" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/custom_info_window.xml" value="0.31431159420289856" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_account.xml" value="0.29030797101449274" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_account2.xml" value="0.31657608695652173" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_dp_desc.xml" value="0.2898550724637681" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_edit_lotdescription.xml" value="0.5" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_edit_profile.xml" value="0.2898550724637681" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_editprofile.xml" value="0.2341485507246377" />
+        <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_feedback.xml" value="0.2898550724637681" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_home.xml" value="0.2966485507246377" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_home2.xml" value="0.31657608695652173" />
         <entry key="..\:/Users/Ignacio/AndroidStudioProjects/AuthenticationApp/app/src/main/res/layout/fragment_parking.xml" value="0.33" />
