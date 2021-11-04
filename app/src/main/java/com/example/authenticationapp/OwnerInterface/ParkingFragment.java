@@ -45,7 +45,12 @@ public class ParkingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_parking,container,false);
 
 
-        String[] parkingList = {"Modify Parking Slot", "Statistics", "Lot Description", "Gallery", "Security Level"};
+        fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+
+        userID = fAuth.getCurrentUser().getUid();
+
+        String[] parkingList = {"Modify Parking Slot", "Lot Description", "Gallery"};
 
         ListView listView = (ListView) view.findViewById(R.id.parkingLV);
 
@@ -63,10 +68,7 @@ public class ParkingFragment extends Fragment {
                 if (position == 0) {
 
 
-                } else if (position == 1) {
-
-
-                } else if (position == 2) {
+                }  else if (position == 1) {
                     AlertDialog.Builder mydialog = new AlertDialog.Builder(getActivity());
                     mydialog.setTitle("Lot Description");
 
@@ -74,17 +76,25 @@ public class ParkingFragment extends Fragment {
                     mydialog.setView(lotdescription);
 
                     try {
-                        DocumentReference documentReference4 = fStore.collection("users").document(userID);
-                        documentReference4.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-
+                        DocumentReference getGarage = fStore.collection("users").document(userID);
+                        getGarage.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    lot_desc = documentSnapshot.getString("Lot Description");
-                                    ctr = 1;
-                                    lotdescription.setText(lot_desc);
-                                    mydialog.setView(lotdescription);
-                                }
+                                String lotname = documentSnapshot.getString("Lot name");
+
+                                DocumentReference documentReference4 = fStore.collection("Garage Locations").document(lotname);
+
+                                documentReference4.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists()) {
+                                            lot_desc = documentSnapshot.getString("Lot Description");
+                                            ctr = 1;
+                                            lotdescription.setText(lot_desc);
+                                            mydialog.setView(lotdescription);
+                                        }
+                                    }
+                                });
                             }
                         });
 
@@ -96,35 +106,46 @@ public class ParkingFragment extends Fragment {
                     mydialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            DocumentReference getGarage = fStore.collection("users").document(userID);
 
-                            if (ctr == 1){
-                                Map<String, Object> update = new HashMap<>();
-                                update.put("Lot Description", lotdescription.getText().toString());
+                            getGarage.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    String lotname = documentSnapshot.getString("Lot name");
 
-                                DocumentReference documentReference = fStore.collection("users").document(userID);
-                                documentReference.update(update).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getActivity(), "Error Occurred", Toast.LENGTH_SHORT).show();
-                                        }
+                                    if (ctr == 1){
+                                        Map<String, Object> update = new HashMap<>();
+                                        update.put("Lot Description", lotdescription.getText().toString());
+
+                                        DocumentReference documentReference = fStore.collection("Garage Locations").document(lotname);
+                                        documentReference.update(update).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(getActivity(), "Error Occurred", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }else {
+                                        fAuth = FirebaseAuth.getInstance();
+                                        fStore = FirebaseFirestore.getInstance();
+
+                                        userID = fAuth.getCurrentUser().getUid();
+                                        DocumentReference userRef = fStore.collection("Garage Locations").document(lotname);
+                                        Map<String, Object> user = new HashMap<>();
+                                        user.put("Lot Description", lotdescription.getText().toString());
+
+                                        userRef.set(user, SetOptions.merge());
                                     }
-                                });
-                            }
 
-                            else {
-                                fAuth = FirebaseAuth.getInstance();
-                                fStore = FirebaseFirestore.getInstance();
+                                }
+                            });
 
-                                userID = fAuth.getCurrentUser().getUid();
-                                DocumentReference userRef = fStore.collection("users").document(userID);
-                                Map<String, Object> user = new HashMap<>();
-                                user.put("Lot Description", lotdescription.getText().toString());
 
-                                userRef.set(user, SetOptions.merge());
-                            }
+
+
                         }
                     });
 
@@ -137,9 +158,9 @@ public class ParkingFragment extends Fragment {
                     });
                     mydialog.show();
 
-                } else if (position == 3) {
 
-                } else if (position == 4) {
+                }
+                else if (position == 2) {
 
                 }
             }

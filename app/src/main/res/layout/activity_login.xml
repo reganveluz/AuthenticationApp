@@ -7,7 +7,7 @@
     android:background="@drawable/abstract_lines_purple_galaxy_pattern"
     tools:context=".UserLogin.Login"
     tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="196dp">
+    tools:layout_editor_absoluteY="0dp">
 
 
     <TextView

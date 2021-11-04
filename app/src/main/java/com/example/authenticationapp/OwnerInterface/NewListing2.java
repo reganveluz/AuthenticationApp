@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -146,6 +147,19 @@ public class NewListing2 extends AppCompatActivity {
                 ArrayList operationalDays = mOperationalDays;
                 String startingTime = mStarting.getText().toString();
                 String endTime = mEnd.getText().toString();
+
+                if (!mMonday.isChecked() && !mTuesday.isChecked() && !mTuesday.isChecked() && !mWednesday.isChecked() && !mThursday.isChecked() && !mFriday.isChecked() && mSaturday.isChecked() && mSunday.isChecked()) {
+                    Toast.makeText(NewListing2.this, "Please select operational days", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(startingTime)) {
+                    mStarting.setError("Please enter starting time");
+                    return;
+                }
+                if (TextUtils.isEmpty(endTime)) {
+                    mEnd.setError("Please enter end time");
+                    return;
+                }
 
                 userID = fAuth.getCurrentUser().getUid();
                 DocumentReference userRef = fStore.collection("users").document(userID);

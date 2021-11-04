@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AuthenticationApp">
         <activity
+            android:name=".DriverInterface.booking_ended"
+            android:exported="false" />
+        <activity
             android:name=".DriverInterface.QRReceipt"
             android:exported="false" />
         <activity
@@ -88,6 +91,14 @@
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"
             android:value="true" />
+
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

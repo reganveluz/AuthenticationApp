@@ -246,7 +246,7 @@ public class AddListingMaps extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                                     String slot = documentSnapshot.getString("Exact number of slots");
-                                    String value = null;
+                                    String value = "1";
                                     try {
                                         number = Integer.parseInt(slot);
 

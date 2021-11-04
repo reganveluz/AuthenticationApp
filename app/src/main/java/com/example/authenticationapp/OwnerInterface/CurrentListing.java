@@ -16,24 +16,33 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.authenticationapp.OwnerInterface.ModifyListing;
+import com.example.authenticationapp.OwnerInterface.Owner;
 import com.example.authenticationapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Phaser;
 
 public class CurrentListing extends AppCompatActivity {
     FirebaseFirestore fStore;
@@ -43,6 +52,9 @@ public class CurrentListing extends AppCompatActivity {
     Button mmodifyBtn, mdeleteBtn;
     ImageView mimageView;
     private StorageReference mStorageReference;
+    private StorageReference mStorageReference1;
+    private StorageReference mStorageReference2;
+    private StorageReference mStorageReference3;
     String url;
 
     @Override
@@ -175,6 +187,46 @@ public class CurrentListing extends AppCompatActivity {
 
     public void deletelisting() {
 
+        mStorageReference1 = FirebaseStorage.getInstance().getReferenceFromUrl("gs://authenticationapp-8da8c.appspot.com/Images/"+userID+".Lot Images");
+        mStorageReference2 = FirebaseStorage.getInstance().getReferenceFromUrl("gs://authenticationapp-8da8c.appspot.com/Images/"+userID+".LandTitle");
+        mStorageReference3 = FirebaseStorage.getInstance().getReferenceFromUrl("gs://authenticationapp-8da8c.appspot.com/Images/"+userID+".Valid ID");
+
+        mStorageReference1.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Store", "onSuccess: deleted file");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Store", "onFailure: Unsuccessful");
+            }
+        });
+
+        mStorageReference2.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Store", "onSuccess: deleted file");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Store", "onFailure: Unsuccessful");
+            }
+        });
+
+        mStorageReference3.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Store", "onSuccess: deleted file");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Store", "onFailure: Unsuccessful");
+            }
+        });
+
         DocumentReference documentReference = fStore.collection("users").document(userID);
         userID = fAuth.getCurrentUser().getUid();
         fAuth = FirebaseAuth.getInstance();
@@ -208,6 +260,3 @@ public class CurrentListing extends AppCompatActivity {
     }
 
 }
-
-
-

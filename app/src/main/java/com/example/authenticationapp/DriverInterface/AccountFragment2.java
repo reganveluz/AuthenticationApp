@@ -23,8 +23,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.authenticationapp.MainActivity;
+import com.example.authenticationapp.OwnerInterface.editProfile;
+import com.example.authenticationapp.OwnerInterface.feedback;
 import com.example.authenticationapp.R;
 import com.example.authenticationapp.UserLogin.Login;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,67 +53,99 @@ public class AccountFragment2 extends Fragment {
     StorageReference mStorageRef, mStorageReference;
     ImageView imageView;
     Button btn1;
+    ListView listView;
+    TextView edit;
     public Uri imguri;
+    public String phone, address, email;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_account2, container, false);
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
+
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         userID = fAuth.getCurrentUser().getUid();
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
 
 
-        String[] parkingList = {"Phone number", "Email", "Password", "Security", "Country/Region", "Help Centre", "Feedback","Switch Account Type", "Sign Out"};
+        DocumentReference documentReference4 = fStore.collection("users").document(userID);
+        documentReference4.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 
-        ListView listView = (ListView) view.findViewById(R.id.parkingLV);
-
-        ArrayAdapter<String> listviewAdapter = new ArrayAdapter<String>(
-                getActivity(), android.R.layout.simple_list_item_1, parkingList
-
-        );
-        listView.setAdapter(listviewAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Object item = listView.getItemAtPosition(position);
-                Toast.makeText(getActivity(), "You selected : " + item, Toast.LENGTH_SHORT).show();
-                if (position == 0) {
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    phone = documentSnapshot.getString("Phone");
+                    email = documentSnapshot.getString("Email");
 
-                } else if (position == 1) {
+                    String[] parkingList = {"Phone number : " + phone, "Email : " + email,"Help Centre", "Feedback","Switch Account Type", "Sign Out"};
 
-                } else if (position == 2) {
-                } else if (position == 3) {
-                } else if (position == 4) {
-                } else if (position == 5) {
-                } else if (position == 6) {
-                } else if (position == 7) {
-                    startActivity(new Intent(getActivity(), MainActivity.class));
-                } else if (position == 8) {
-                    new AlertDialog.Builder(getActivity())
-                            .setCancelable(false)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setTitle("Sign Out")
-                            .setMessage("Are you sure you want sign out of Parking Boy?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    FirebaseAuth.getInstance().signOut();//logout
-                                    startActivity(new Intent(getActivity(), Login.class));
-                                }
+                    listView = (ListView) view.findViewById(R.id.parkingLV);
 
-                            })
-                            .setNegativeButton("No", null)
-                            .show();
+                    ArrayAdapter<String> listviewAdapter = new ArrayAdapter<String>(
+                            getActivity(), android.R.layout.simple_list_item_1, parkingList
+                    );
+                    listView.setAdapter(listviewAdapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                            Object item = listView.getItemAtPosition(position);
+                            Toast.makeText(getActivity(), "You selected : " + item, Toast.LENGTH_SHORT).show();
+
+                            if (position == 2){
+
+                            }
+                            else if (position == 3){
+                                feedback fb = new feedback();
+                                FragmentManager fragmentManager = getFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.fragment_container, fb);
+                                fragmentTransaction.commit();
+                            }
+
+                            else if (position == 4) {
+                                startActivity(new Intent(getActivity(), MainActivity.class));
+                            } else if (position == 5) {
+                                new AlertDialog.Builder(getActivity())
+                                        .setCancelable(false)
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .setTitle("Sign Out")
+                                        .setMessage("Are you sure you want sign out of Parking Boy?")
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                FirebaseAuth.getInstance().signOut();//logout
+                                                startActivity(new Intent(getActivity(), Login.class));
+                                            }
+                                        })
+                                        .setNegativeButton("No", null)
+                                        .show();
+                            }
+                        }
+                    });
+
+                    edit = (TextView)getView().findViewById(R.id.editTV);
+                    edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            editProfile editProfile = new editProfile();
+                            FragmentManager fragmentManager = getFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.fragment_container, editProfile);
+                            fragmentTransaction.commit();
+
+                        }
+                    });
+
                 }
+
+
             }
+
         });
 
-        fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
-        userID = fAuth.getCurrentUser().getUid();
+
         mStorageReference = FirebaseStorage.getInstance().getReference().child("Images/"+userID+".ProfileAvatar");
 
         try {
@@ -173,9 +209,12 @@ public class AccountFragment2 extends Fragment {
         });
 
 
+
+
         return view;
 
     }
+
     private void Fileuploader() {
         StorageReference Ref = mStorageRef.child(userID + ".ProfileAvatar");
         userID = fAuth.getCurrentUser().getUid();
@@ -210,4 +249,5 @@ public class AccountFragment2 extends Fragment {
             }
         }
     }
+
 }

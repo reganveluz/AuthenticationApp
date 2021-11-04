@@ -88,9 +88,6 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback, Googl
     private String userID;
     private GoogleMap mgoogleMap;
     private MapView mapView;
-    private ClusterManager mClusterManager;
-    private MyClusterManagerRenderer mClusterManagerRenderer;
-    private ArrayList<ClusterMarker> mClusterMarkers;
     boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
     private UserLocation mUserLocation;
@@ -435,20 +432,6 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback, Googl
         mapView.onLowMemory();
     }
 
-    private void addMapMarkers() {
-
-        if (mgoogleMap != null) {
-            if (mClusterManager == null) {
-                mClusterManager = new ClusterManager<ClusterMarker>(getActivity().getApplicationContext(), mgoogleMap);
-            }
-            if (mClusterManagerRenderer == null) {
-                mClusterManagerRenderer = new MyClusterManagerRenderer(getActivity(), mgoogleMap, mClusterManager);
-                mClusterManager.setRenderer(mClusterManagerRenderer);
-            }
-
-        }
-
-    }
 
     private boolean checkMapServices() {
         if (isServicesOK()) {
@@ -581,6 +564,7 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback, Googl
                         String start = documentSnapshot.getString("Starting Time");
                         String end = documentSnapshot.getString("End Time");
                         String phone = documentSnapshot.getString("Phone");
+                        String lotdescription = documentSnapshot.getString("Lot Description");
                         double lat = geoPoint.getLatitude();
                         double lng = geoPoint.getLongitude();
                         LatLng latLng = new LatLng(lat,lng);
@@ -588,7 +572,7 @@ public class HomeFragment2 extends Fragment implements OnMapReadyCallback, Googl
                                 .position(latLng)
                                 .title(garageName)
                                 .snippet(" Address: " + address + "\n Slots available: " + slot + "\n Cars supported: " + cartype
-                                + "\n Start: " + start + "\n Close: " + end + "\n Contact Info: " +phone)
+                                + "\n Start: " + start + "\n Close: " + end + "\n Contact Info: " +phone + "\n Description: " + lotdescription)
                                 .icon(bitmapDescriptorFromVector(getActivity(),R.drawable.marker_icon));
                         mgoogleMap.addMarker(markerOptions);
 

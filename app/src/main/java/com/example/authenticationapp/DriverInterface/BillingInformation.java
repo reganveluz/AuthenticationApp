@@ -25,6 +25,7 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class BillingInformation extends AppCompatActivity {
 
@@ -107,9 +108,11 @@ public class BillingInformation extends AppCompatActivity {
                         Map<String, Object> transaction = new HashMap<>();
 
                         transaction.put("Reference Number", referenceNo);
+                        transaction.put("Price", mPrice.getText().toString());
                         transaction.put("Approval", mApproved);
 
-                        transactionRef.set(transaction, SetOptions.merge());
+
+                        transactionRef.set(transaction);
 
                         mShowRefNo.setText("Ref #"+referenceNo);
                     }
@@ -158,19 +161,21 @@ public class BillingInformation extends AppCompatActivity {
                                 updateSlotStatus.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-
+                                        String vacancy = "1";
                                         String reserved = "2";
 
                                         for(int i = 1; i<= number; i++){
                                             String slot = documentSnapshot.getString("Slot "+i);
 
-                                            if(slot==null){
+                                            if(Objects.equals(slot, vacancy)){
                                                 Map<String, Object> update = new HashMap<>();
                                                 update.put("Slot "+i, reserved);
 
                                                 updateSlotStatus.set(update, SetOptions.merge());
+                                                transactionRef.set(update, SetOptions.merge());
 
                                                 break;
+
                                             }
                                         }
 
